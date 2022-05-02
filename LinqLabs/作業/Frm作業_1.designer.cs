@@ -55,8 +55,9 @@ namespace MyHomeWork
             this.label2 = new System.Windows.Forms.Label();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.nwDataSet11 = new LinqLabs.NWDataSet1();
-            this.ordersTableAdapter1 = new LinqLabs.NWDataSet1TableAdapters.OrdersTableAdapter();
             this.productsTableAdapter1 = new LinqLabs.NWDataSet1TableAdapters.ProductsTableAdapter();
+            this.ordersTableAdapter1 = new LinqLabs.NWDataSet1TableAdapters.OrdersTableAdapter();
+            this.order_DetailsTableAdapter1 = new LinqLabs.NWDataSet1TableAdapters.Order_DetailsTableAdapter();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
@@ -398,13 +399,17 @@ namespace MyHomeWork
             this.nwDataSet11.DataSetName = "NWDataSet1";
             this.nwDataSet11.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
+            // productsTableAdapter1
+            // 
+            this.productsTableAdapter1.ClearBeforeFill = true;
+            // 
             // ordersTableAdapter1
             // 
             this.ordersTableAdapter1.ClearBeforeFill = true;
             // 
-            // productsTableAdapter1
+            // order_DetailsTableAdapter1
             // 
-            this.productsTableAdapter1.ClearBeforeFill = true;
+            this.order_DetailsTableAdapter1.ClearBeforeFill = true;
             // 
             // Frm作業_1
             // 
@@ -464,7 +469,8 @@ namespace MyHomeWork
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.BindingSource bindingSource1;
         private LinqLabs.NWDataSet1 nwDataSet11;
-        private LinqLabs.NWDataSet1TableAdapters.OrdersTableAdapter ordersTableAdapter1;
         private LinqLabs.NWDataSet1TableAdapters.ProductsTableAdapter productsTableAdapter1;
+        private LinqLabs.NWDataSet1TableAdapters.OrdersTableAdapter ordersTableAdapter1;
+        private LinqLabs.NWDataSet1TableAdapters.Order_DetailsTableAdapter order_DetailsTableAdapter1;
     }
 }
