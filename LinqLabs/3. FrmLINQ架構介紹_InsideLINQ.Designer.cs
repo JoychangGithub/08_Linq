@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.button54 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -89,6 +90,7 @@
             // 
             this.groupBox7.AutoSize = true;
             this.groupBox7.BackColor = System.Drawing.SystemColors.Control;
+            this.groupBox7.Controls.Add(this.button1);
             this.groupBox7.Controls.Add(this.label8);
             this.groupBox7.Controls.Add(this.button54);
             this.groupBox7.Controls.Add(this.button3);
@@ -102,6 +104,16 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Step 3. 執行 Query 查詢";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(239, 43);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(111, 63);
+            this.button1.TabIndex = 18;
+            this.button1.Text = "Aggregation";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -109,7 +121,7 @@
             this.label8.Location = new System.Drawing.Point(33, 76);
             this.label8.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(146, 22);
+            this.label8.Size = new System.Drawing.Size(100, 15);
             this.label8.TabIndex = 17;
             this.label8.Text = "Query 如何執行";
             // 
@@ -138,6 +150,7 @@
             this.button3.TabIndex = 2;
             this.button3.Text = "延遲查詢估算 ";
             this.button3.UseVisualStyleBackColor = false;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // label1
             // 
@@ -147,7 +160,7 @@
             this.label1.Location = new System.Drawing.Point(39, 88);
             this.label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(139, 20);
+            this.label1.Size = new System.Drawing.Size(94, 13);
             this.label1.TabIndex = 31;
             this.label1.Text = "LINQ 三部驟 :";
             // 
@@ -199,7 +212,7 @@
             this.label7.Location = new System.Drawing.Point(32, 40);
             this.label7.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(395, 22);
+            this.label7.Size = new System.Drawing.Size(277, 15);
             this.label7.TabIndex = 20;
             this.label7.Text = "Query Expression 如何轉成 Query Method) ";
             // 
@@ -348,7 +361,7 @@
             // 
             this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 22;
+            this.listBox1.ItemHeight = 15;
             this.listBox1.Location = new System.Drawing.Point(0, 0);
             this.listBox1.Margin = new System.Windows.Forms.Padding(5);
             this.listBox1.Name = "listBox1";
@@ -484,7 +497,7 @@
             // 
             // FrmLINQ架構介紹_InsideLINQ
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 22F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1616, 1050);
             this.Controls.Add(this.splitContainer4);
@@ -558,6 +571,7 @@
         private System.Windows.Forms.SplitContainer splitContainer4;
         private LinqLabs.NWDataSet1TableAdapters.ProductsTableAdapter productsTableAdapter1;
         private LinqLabs.NWDataSet1 nwDataSet11;
+        private System.Windows.Forms.Button button1;
     }
 }
 

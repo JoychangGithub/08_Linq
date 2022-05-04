@@ -28,7 +28,6 @@ namespace MyHomeWork
         int countPage = 0;
         private void button13_Click(object sender, EventArgs e)
         {
-            this.dataGridView1.DataSource = null;
             this.dataGridView2.DataSource = null;
             lblMaster.Text = "";
 
