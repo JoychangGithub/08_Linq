@@ -23,8 +23,11 @@ namespace Starter
         NorthwindEntities dbContext = new NorthwindEntities(); //記憶體的BD:dbContext //需using LinqLabs : NorthwindEntities在namespace LinqLabs下
         private void button1_Click(object sender, EventArgs e)
         {        
-            var q = from p in dbContext.Products
-                    where p.UnitPrice > 30
+            var q = from p in dbContext.Products  //var: 真正型別為IQueryable<T>
+                   //IEnumerable是把整個資料撈回來存在記憶體再去篩選,
+                  //IQueryable是條件都串好再去query資料, 遇到資料量大不管怎樣轉成IQueryable的型別就對了
+
+                  where p.UnitPrice > 30
                     select p;
 
             this.dataGridView1.DataSource = q.ToList();
@@ -49,7 +52,7 @@ namespace Starter
         private void button22_Click(object sender, EventArgs e)
         {
             //查詢運算式寫法
-            var q = from p in this.dbContext.Products.AsEnumerable()  //加了.AsEnumerable(): 變成select * from products(執行T-SQL)，抓回記憶體中
+            var q = from p in this.dbContext.Products.AsEnumerable()  //加了.AsEnumerable(): 變成select * from products(執行T-SQL)，抓回記憶體中在執行Query
                     orderby p.UnitsInStock descending, p.ProductID descending
                     //select p;
                     select new
@@ -99,7 +102,7 @@ namespace Starter
 
         private void button21_Click(object sender, EventArgs e)
         {
-            //inner join:  Products中無categoryID=13的產品，因此結果不會出現categoryID=13的資訊
+            //inner join:  Products中無categoryID=10的產品，因此結果不會出現categoryID=10的資訊 (寫法1)
 
             var q = from c in this.dbContext.Categories
                     from p in c.Products  //物件化查詢
@@ -111,6 +114,17 @@ namespace Starter
                         p.UnitPrice
                     };
             this.dataGridView1.DataSource = q.ToList();
+            //=============================================================
+            //寫法2:
+            //this.dbContext.Categories.SelectMany(c => c.Products, (c, p) => new { c.CategoryID, c.CategoryName, p.ProductID, p.UnitPrice});
+           
+            //=============================================================
+            //cross join : 此方法不行，會出現錯誤
+            var q2 = from c in this.dbContext.Categories
+                     from p in this.dbContext.Products
+                     select new { c.CategoryID, c.CategoryName, p.ProductID, p.UnitPrice, p.UnitsInStock };
+            MessageBox.Show("q2.count() =" + q2.Count());
+            this.dataGridView2.DataSource = q2.ToList();
         }
 
         //join - groupby: 尋找各分類的平均單價
@@ -129,6 +143,61 @@ namespace Starter
         //尋找 低中高 價產品
         private void button8_Click(object sender, EventArgs e)
         {
+            
+        }
+
+        //[新增修改刪除資料到實體DB]
+        private void button55_Click(object sender, EventArgs e)
+        {
+            //[新增資料到實體DB]: Add Product
+            Product product = new Product { ProductName = "Test " + DateTime.Now.ToString(), Discontinued = true };
+            
+            this.dbContext.Products.Add(product);  //新增一筆資料到記憶體
+
+            this.dbContext.SaveChanges();  //更新資料到實體資料庫
+
+            this.Read_RefreshDataGridView();
+        }
+
+        private void button56_Click(object sender, EventArgs e)
+        {
+            //update
+            var product = (from p in this.dbContext.Products
+                           where p.ProductName.Contains("Test")  //選取將要變更的資料
+                           select p).FirstOrDefault();    //若找無資料不會exception則是傳回null
+
+            if (product == null) return; //exit method
+
+            product.ProductName = "Test" + product.ProductName;  //變更記憶體資料
+
+            this.dbContext.SaveChanges();  //更新資料到實體資料庫
+
+            this.Read_RefreshDataGridView();
+        }
+
+        private void button53_Click(object sender, EventArgs e)
+        {
+            //delete one product
+            var product = (from p in this.dbContext.Products
+                           where p.ProductName.Contains("Test")  //選取將要變更的資料
+                           select p).FirstOrDefault();  //若找無資料不會exception則是傳回null
+
+            if (product == null) return;
+
+            this.dbContext.Products.Remove(product);  //刪除記憶體資料
+            this.dbContext.SaveChanges();  //更新資料到實體資料庫
+
+            this.Read_RefreshDataGridView();
+        }
+        void Read_RefreshDataGridView()  //Manage dataGridView1
+        {
+            this.dataGridView1.DataSource = null;
+            this.dataGridView1.DataSource = this.dbContext.Products.ToList();
+
+        }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
             var q = from o in this.dbContext.Orders
                     group o by o.OrderDate.Value.Year into g  //o.OrderDate可為null，在DB設計中若有可為空值的數值型態會加上"?"，因此需.Value才能點到Year
                     select new
@@ -137,15 +206,32 @@ namespace Starter
                         Count = g.Count()
                     };
             this.dataGridView1.DataSource = q.ToList();
+            //====================
+            var q2 = from o in this.dbContext.Orders
+                     group o by new { o.OrderDate.Value.Year, o.OrderDate.Value.Month } into g
+                     select new { Year = g.Key, Count = g.Count() };
+
+            this.dataGridView2.DataSource = q2.ToList();
         }
 
-        //[新增修改刪除資料到實體DB]
-        private void button55_Click(object sender, EventArgs e)
+        private void button23_Click(object sender, EventArgs e)
         {
-            //[新增資料到實體DB]
-            Product prod = new Product { ProductName = DateTime.Now.ToLongTimeString(), Discontinued = true };
-            this.dbContext.Products.Add(prod);  //新增資料
-            this.dbContext.SaveChanges();  //更新到實體DB
+            ////自訂 compare logic
+            var q3 = dbContext.Products.AsEnumerable().OrderBy(p => p, new MyComparer()).ToList();
+            this.dataGridView2.DataSource = q3.ToList();
+        }
+        class MyComparer : IComparer<Product>
+        {
+            public int Compare(Product x, Product y)
+            {
+                if (x.UnitPrice < y.UnitPrice)
+                    return -1;
+                else if (x.UnitPrice > y.UnitPrice)
+                    return 1;
+                else
+                    return string.Compare(x.ProductName[0].ToString(), y.ProductName[0].ToString(), true);
+
+            }
         }
     }
 }

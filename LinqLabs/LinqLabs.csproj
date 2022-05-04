@@ -93,6 +93,9 @@
     <Compile Include="Category.cs">
       <DependentUpon>NWModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Employee.cs">
+      <DependentUpon>NWModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="NWDataSet1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -145,6 +148,12 @@
     <Compile Include="作業\Frm作業_3.designer.cs">
       <DependentUpon>Frm作業_3.cs</DependentUpon>
     </Compile>
+    <Compile Include="作業\Frm考試.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="作業\Frm考試.designer.cs">
+      <DependentUpon>Frm考試.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="1. FrmHelloLinq.resx">
       <DependentUpon>1. FrmHelloLinq.cs</DependentUpon>
     </EmbeddedResource>
@@ -178,6 +187,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="作業\Frm作業_3.resx">
       <DependentUpon>Frm作業_3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="作業\Frm考試.resx">
+      <DependentUpon>Frm考試.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="AWDataSet1.xsc">
       <DependentUpon>AWDataSet1.xsd</DependentUpon>

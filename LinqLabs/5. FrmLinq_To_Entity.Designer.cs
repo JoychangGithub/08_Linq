@@ -53,6 +53,7 @@
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.splitContainer4 = new System.Windows.Forms.SplitContainer();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button3 = new System.Windows.Forms.Button();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.splitContainer5 = new System.Windows.Forms.SplitContainer();
             this.listBox1 = new System.Windows.Forms.ListBox();
@@ -60,7 +61,6 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.button3 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -112,6 +112,7 @@
             this.button23.TabIndex = 113;
             this.button23.Text = "new MyComparer())";
             this.button23.UseVisualStyleBackColor = true;
+            this.button23.Click += new System.EventHandler(this.button23_Click);
             // 
             // button53
             // 
@@ -123,6 +124,7 @@
             this.button53.TabIndex = 113;
             this.button53.Text = "Delete";
             this.button53.UseVisualStyleBackColor = true;
+            this.button53.Click += new System.EventHandler(this.button53_Click);
             // 
             // button54
             // 
@@ -157,6 +159,7 @@
             this.button56.TabIndex = 110;
             this.button56.Text = "Update";
             this.button56.UseVisualStyleBackColor = true;
+            this.button56.Click += new System.EventHandler(this.button56_Click);
             // 
             // button57
             // 
@@ -180,6 +183,7 @@
             this.button14.TabIndex = 119;
             this.button14.Text = "TODO : Orders -  Group by 日期 / 大小";
             this.button14.UseVisualStyleBackColor = false;
+            this.button14.Click += new System.EventHandler(this.button14_Click);
             // 
             // button19
             // 
@@ -412,6 +416,16 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "join";
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(332, 129);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(115, 42);
+            this.button3.TabIndex = 94;
+            this.button3.Text = "Sales_By_Year";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
             // splitContainer3
             // 
             this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -532,16 +546,6 @@
             this.groupBox5.TabIndex = 114;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "join / Group By";
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(332, 129);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(115, 42);
-            this.button3.TabIndex = 94;
-            this.button3.Text = "Sales_By_Year";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // FrmLinq_To_Entity
             // 

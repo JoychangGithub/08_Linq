@@ -31,6 +31,7 @@ namespace LinqLabs
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Order_Detail> Order_Details { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<Employee> Employees { get; set; }
     
         public virtual ObjectResult<Sales_by_Year_Result> Sales_by_Year(Nullable<System.DateTime> beginning_Date, Nullable<System.DateTime> ending_Date)
         {
