@@ -33,17 +33,17 @@ namespace LinqLabs
         public class Student
         {
             public string Name { get; set; }
-            public string Class { get;  set; }
+            public string Class { get; set; }
             public int Chi { get; set; }
             public int Eng { get; internal set; }
-            public int Math { get;  set; }
+            public int Math { get; set; }
             public string Gender { get; set; }
         }
 
         private void button36_Click(object sender, EventArgs e)
         {
             #region 搜尋 班級學生成績
-           
+
             // 
             // 共幾個 學員成績 ?						
 
@@ -61,7 +61,7 @@ namespace LinqLabs
             #endregion
 
         }
-  
+
         private void button37_Click(object sender, EventArgs e)
         {
             //個人 sum, min, max, avg
@@ -98,14 +98,14 @@ namespace LinqLabs
         private void button34_Click(object sender, EventArgs e)
         {
             // 每年 總銷售分析 圖
-          
-            var q = from od in this.dbContext.Order_Details
+
+            var q = from od in this.dbContext.Order_Details.AsEnumerable()
                     group od by od.Order.OrderDate.Value.Year into g
                     orderby g.Key ascending
                     select new
                     {
                         Year = g.Key,
-                        TotalPrice = g.Sum(od => od.UnitPrice * od.Quantity)
+                        TotalPrice = g.Sum(od => od.UnitPrice * od.Quantity * (decimal)(1 - od.Discount))
 
                     };
 
@@ -120,20 +120,20 @@ namespace LinqLabs
 
             // 哪一年總銷售最好?
             var q5 = (from od in this.dbContext.Order_Details.AsEnumerable()
-                    group od by od.Order.OrderDate.Value.Year into g
-                    orderby g.Sum(od => od.UnitPrice * od.Quantity) descending
-                    select new
-                    {
-                        Year = g.Key,
-                        TotalPrice = $"{g.Sum(od => od.UnitPrice * od.Quantity):c2}"
+                      group od by od.Order.OrderDate.Value.Year into g
+                      orderby g.Sum(od => od.UnitPrice * od.Quantity * (decimal)(1 - od.Discount)) descending
+                      select new
+                      {
+                          Year = g.Key,
+                          TotalPrice = $"{g.Sum(od => od.UnitPrice * od.Quantity * (decimal)(1 - od.Discount)):c2}"
 
-                    }).First();
+                      }).First();
             this.label3.Text = q5.ToString().Trim('{', '}') + "銷售最佳";
 
             //哪一年總銷售最不好?
-            var q6= (from od in this.dbContext.Order_Details.AsEnumerable()
+            var q6 = (from od in this.dbContext.Order_Details.AsEnumerable()
                       group od by od.Order.OrderDate.Value.Year into g
-                      orderby g.Sum(od => od.UnitPrice * od.Quantity) descending
+                      orderby g.Sum(od => od.UnitPrice * od.Quantity * (decimal)(1 - od.Discount)) descending
                       select new
                       {
                           Year = g.Key,
@@ -145,14 +145,14 @@ namespace LinqLabs
 
             // 每月 總銷售分析 圖
 
-            var q2 = from od in this.dbContext.Order_Details
+            var q2 = from od in this.dbContext.Order_Details.AsEnumerable()
                      group od by new { od.Order.OrderDate.Value.Month } into g
                      orderby g.Key.Month ascending
                      select new
                      {
                          //Classification = g.Key,
                          Month = g.Key.Month,
-                         AveragePrice = g.Average(od => od.UnitPrice * od.Quantity)
+                         AveragePrice = g.Average(od => od.UnitPrice * od.Quantity * (decimal)(1 - od.Discount))
 
                      };
 
@@ -169,46 +169,45 @@ namespace LinqLabs
 
             //那一個月總銷售最好 ?
             var q3 = (from od in this.dbContext.Order_Details.AsEnumerable()
-                     group od by new {od.Order.OrderDate.Value.Month } into g
-                     orderby  g.Average(od => od.UnitPrice * od.Quantity) descending
-                     select new
-                     {
-                         //Classification = g.Key,
-                         Month = g.Key.Month,
-                         AveragePrice = $"{g.Average(od => od.UnitPrice * od.Quantity):c2}"
-
-                     }).First();
-
-            this.label1.Text = q3.ToString().Trim('{','}') + "銷售最佳";
-
-            // 那一個月總銷售最不好 ?
-            var q4 = (from od in this.dbContext.Order_Details.AsEnumerable()
                       group od by new { od.Order.OrderDate.Value.Month } into g
-                      orderby g.Average(od => od.UnitPrice * od.Quantity) descending
+                      orderby g.Average(od => od.UnitPrice * od.Quantity * (decimal)(1 - od.Discount)) descending
                       select new
                       {
                           //Classification = g.Key,
                           Month = g.Key.Month,
-                          AveragePrice = $"{g.Average(od => od.UnitPrice * od.Quantity):c2}"
+                          AveragePrice = $"{g.Average(od => od.UnitPrice * od.Quantity * (decimal)(1 - od.Discount)):c2}"
+
+                      }).First();
+
+            this.label1.Text = q3.ToString().Trim('{', '}') + "銷售最佳";
+
+            // 那一個月總銷售最不好 ?
+            var q4 = (from od in this.dbContext.Order_Details.AsEnumerable()
+                      group od by new { od.Order.OrderDate.Value.Month } into g
+                      orderby g.Average(od => od.UnitPrice * od.Quantity * (decimal)(1 - od.Discount)) descending
+                      select new
+                      {
+                          //Classification = g.Key,
+                          Month = g.Key.Month,
+                          AveragePrice = $"{g.Average(od => od.UnitPrice * od.Quantity * (decimal)(1 - od.Discount)):c2}"
 
                       }).Last();
 
             this.label2.Text = q4.ToString().Trim('{', '}') + "銷售最差";
             //======================================================================
-
             // 年度最高銷售金額 年度最低銷售金額
-
-            var q7 = from od in this.dbContext.Order_Details
-                     group od by od.Order.OrderDate.Value.Year into g
+            var q8 = from o in this.dbContext.Orders.AsEnumerable()
+                     group o by o.OrderDate.Value.Year into g
+                     orderby g.Key
                      select new
                      {
                          Year = g.Key,
-                         MaxSellPrice = g.Max(od => od.UnitPrice * od.Quantity),
-                         MinSellPrice = g.Min(od => od.UnitPrice * od.Quantity)
+                         MaxSellPrice = g.Max(o => o.Order_Details.Sum(od => od.UnitPrice * od.Quantity * (decimal)(1 - od.Discount))),
+                         MinSellPrice = g.Min(o => o.Order_Details.Sum(od => od.UnitPrice * od.Quantity * (decimal)(1 - od.Discount)))
                      };
-            this.dataGridView3.DataSource = q7.ToList();
 
-            this.chart3.DataSource = q7.ToList();
+            this.dataGridView3.DataSource = q8.ToList();
+            this.chart3.DataSource = q8.ToList();
 
             this.chart3.Series[0].Color = Color.MediumSeaGreen;
             this.chart3.Series[1].Color = Color.Moccasin;
@@ -218,12 +217,77 @@ namespace LinqLabs
             this.chart3.Series[1].XValueMember = "Year";  //x軸
             this.chart3.Series[0].YValueMembers = "MaxSellPrice"; //y軸
             this.chart3.Series[1].YValueMembers = "MinSellPrice"; //y軸
+            this.chart3.Series[1].YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
 
             this.chart3.Series[0].IsValueShownAsLabel = true;
             this.chart3.Series[1].IsValueShownAsLabel = true;
             this.chart3.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
             this.chart3.Series[1].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
         }
+
+        Dictionary<int, decimal> yearSellDic = new Dictionary<int, decimal>();
+        List<int> yearList = new List<int>();
+        private void button6_Click(object sender, EventArgs e)
+        {
+            var q = from od in this.dbContext.Order_Details.AsEnumerable()
+                    group od by od.Order.OrderDate.Value.Year into g
+                    select new
+                    {
+                        Year = g.Key,                      
+                        TotalPrice = g.Sum(od => od.UnitPrice * od.Quantity * (decimal)(1 - od.Discount)),
+                        Group = g
+                    };
+            this.dataGridView4.DataSource = q.ToList();
+
+            var Q = q.ToList();
+            int year;
+            decimal sells;
+            decimal original;
+            decimal rate;
+
+            for (int i = 1; i < Q.Count; i++)
+            {
+                original = Q[i-1].TotalPrice;
+                year = Q[i].Year;
+                sells = Q[i].TotalPrice;
+                yearSellDic.Add(year, sells);
+                //MessageBox.Show(yearSellDic[year].ToString());
+                yearList.Add(year);
+                //MessageBox.Show(yearList[i].ToString());
+
+
+                rate = (sells - original) / original*100;
+                MessageBox.Show($"{ year}: {rate:f5}%");
+
+                original = sells;
+            }
+
+
+        }
+
+
+
+
+
+
+
+        //private decimal Increasing(int year)
+        //{
+        //    if (year == yearList[0])
+        //    {
+        //        decimal sell = yearSellDic[year];
+        //        rate = (sell - original) / original / 100;
+        //        original = yearSellDic[year];
+        //        return rate;
+        //    }
+        //    else
+        //    {
+        //        decimal sell = yearSellDic[year];
+        //        rate = (sell - original) / original / 100;
+        //        original = yearSellDic[year];
+        //        return rate;
+        //    }
+        //}
     }
 
 }
