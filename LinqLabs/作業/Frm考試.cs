@@ -217,7 +217,7 @@ namespace LinqLabs
             this.chart3.Series[1].XValueMember = "Year";  //x軸
             this.chart3.Series[0].YValueMembers = "MaxSellPrice"; //y軸
             this.chart3.Series[1].YValueMembers = "MinSellPrice"; //y軸
-            this.chart3.Series[1].YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
+            this.chart3.Series[1].YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary; //加x軸
 
             this.chart3.Series[0].IsValueShownAsLabel = true;
             this.chart3.Series[1].IsValueShownAsLabel = true;
@@ -225,7 +225,7 @@ namespace LinqLabs
             this.chart3.Series[1].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
         }
 
-        Dictionary<int, decimal> yearSellDic = new Dictionary<int, decimal>();
+        //Dictionary<int, decimal> yearSellDic = new Dictionary<int, decimal>();
         List<int> yearList = new List<int>();
         private void button6_Click(object sender, EventArgs e)
         {
@@ -239,55 +239,48 @@ namespace LinqLabs
                     };
             this.dataGridView4.DataSource = q.ToList();
 
+
+
+
             var Q = q.ToList();
             int year;
             decimal sells;
             decimal original;
             decimal rate;
+            decimal percentageRate;
 
+            List<decimal> increasingList = new List<decimal>();
+            yearList.Add(1996);
+            increasingList.Add(0); //
             for (int i = 1; i < Q.Count; i++)
             {
                 original = Q[i-1].TotalPrice;
                 year = Q[i].Year;
                 sells = Q[i].TotalPrice;
-                yearSellDic.Add(year, sells);
-                //MessageBox.Show(yearSellDic[year].ToString());
+
+                rate = (sells - original) / original;
+
                 yearList.Add(year);
-                //MessageBox.Show(yearList[i].ToString());
 
-
-                rate = (sells - original) / original*100;
-                MessageBox.Show($"{ year}: {rate:f5}%");
+                percentageRate = (sells - original) / original*100;
+                increasingList.Add(percentageRate);
+                //MessageBox.Show($"{ year}: {rate:f5}%");
 
                 original = sells;
             }
 
+            for (int i = 0; i < increasingList.Count; i++)
+            {
+                this.chart5.DataSource = increasingList;
+                this.chart5.Series[0].Points.AddXY(yearList[i],increasingList[i]);
+                this.chart5.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;                
+                this.chart5.Series[0].Color = Color.MediumSeaGreen;
+                this.chart5.Series[0].Name = "年度最高銷售金額";
 
+                this.chart5.Series[1].Points.AddXY(yearList[i], increasingList[i]);
+                this.chart5.Series[1].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+                this.chart5.Series[1].Color = Color.Maroon;
+            }
         }
-
-
-
-
-
-
-
-        //private decimal Increasing(int year)
-        //{
-        //    if (year == yearList[0])
-        //    {
-        //        decimal sell = yearSellDic[year];
-        //        rate = (sell - original) / original / 100;
-        //        original = yearSellDic[year];
-        //        return rate;
-        //    }
-        //    else
-        //    {
-        //        decimal sell = yearSellDic[year];
-        //        rate = (sell - original) / original / 100;
-        //        original = yearSellDic[year];
-        //        return rate;
-        //    }
-        //}
     }
-
 }
