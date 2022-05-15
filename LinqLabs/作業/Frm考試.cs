@@ -44,20 +44,38 @@ namespace LinqLabs
         {
             #region 搜尋 班級學生成績
 
-            // 
             // 共幾個 學員成績 ?						
 
-            // 找出 前面三個 的學員所有科目成績					
-            // 找出 後面兩個 的學員所有科目成績					
+            // 找出 前面三個 的學員所有科目成績	
+            
+            var FirstThree = students_scores.Select(n=> new {n.Name, n.Chi, n.Eng, n.Math }).Take(3);
+            dataGridView2.DataSource = FirstThree.ToList();
 
-            // 找出 Name 'aaa','bbb','ccc' 的學員國文英文科目成績						
+            // 找出 後面兩個 的學員所有科目成績
+            int count = students_scores.Count;
+            var LastTwo = students_scores.Select(n => new { n.Name, n.Chi, n.Eng, n.Math }).Skip(count-2);
+            dataGridView1.DataSource = LastTwo.ToList();
+
+            // 找出 Name 'aaa','bbb','ccc' 的學員國文英文科目成績
+            var SpecificName = students_scores.Select(n => new { n.Name, n.Chi, n.Eng }).Where(n => n.Name == "aaa" || n.Name == "bbb" || n.Name == "ccc");
+            dataGridView3.DataSource = SpecificName.ToList();
 
             // 找出學員 'bbb' 的成績	                          
+            var Namebbb = students_scores.Select(n => new { n.Name, n.Chi, n.Eng, n.Math }).Where(n => n.Name == "bbb");
+            dataGridView4.DataSource = Namebbb.ToList();
 
             // 找出除了 'bbb' 學員的學員的所有成績 ('bbb' 退學)	
+            var bbb = students_scores.Where(n => n.Name == "bbb");
+            var Exceptionbbb = students_scores.Except(bbb);  //取未交集的部分
+            dataGridView5.DataSource = Exceptionbbb.ToList();
 
-            // 找出 'aaa', 'bbb' 'ccc' 學員 國文數學兩科 科目成績  |				
+            // 找出 'aaa', 'bbb' 'ccc' 學員 國文數學兩科 科目成績	
+            var SpecificNames = students_scores.Select(n => new { n.Name, n.Chi, n.Math }).Where(n => n.Name == "aaa" || n.Name == "bbb" || n.Name == "ccc");
+            dataGridView6.DataSource = SpecificNames.ToList();
+
             // 數學不及格 ... 是誰 
+            var MathFailed = students_scores.Select(n => new { n.Name, n.Chi, n.Eng, n.Math }).Where(n => n.Math < 60);
+            dataGridView7.DataSource = MathFailed.ToList();
             #endregion
 
         }
@@ -66,7 +84,38 @@ namespace LinqLabs
         {
             //個人 sum, min, max, avg
 
+            var q1 = from s in this.students_scores  //個人 sum
+                     select new
+                     {
+                         s.Name,
+                         Sum = s.Chi + s.Eng + s.Math
+                     };
+            this.dataGridView2.DataSource = q1.ToList();
+
+
+            var q2 = from s in this.students_scores  //個人 min
+                     //where s.Name == "aaa"
+                     select new
+                     {
+                         s.Name,
+                         s.Class,
+                         s.Chi,
+                         s.Eng,
+                         s.Math,
+                         //Min = new int[] { s.Chi, s.Eng, s.Math}.Min()  //建立只有成績的struct //方法1
+                         Min = new List<int> { s.Chi, s.Eng, s.Math }.Min(),  //建立只有成績的list  //方法2
+                         Max = new List<int> { s.Chi, s.Eng, s.Math }.Max(),
+                         Ave = new List<int> { s.Chi, s.Eng, s.Math }.Average()
+                     };
+
+
+            this.dataGridView1.DataSource = q2.ToList();
+
+
             //各科 sum, min, max, avg
+
+
+
         }
         private void button33_Click(object sender, EventArgs e)
         {

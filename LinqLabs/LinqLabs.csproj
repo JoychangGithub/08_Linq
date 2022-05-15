@@ -130,6 +130,12 @@
     <Compile Include="Sales_by_Year_Result.cs">
       <DependentUpon>NWModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="test1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="test1.Designer.cs">
+      <DependentUpon>test1.cs</DependentUpon>
+    </Compile>
     <Compile Include="作業\Frm作業_1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -179,6 +185,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="test1.resx">
+      <DependentUpon>test1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="作業\Frm作業_1.resx">
       <DependentUpon>Frm作業_1.cs</DependentUpon>
     </EmbeddedResource>
